@@ -3,7 +3,17 @@ package utf8_util
 import "core:c"
 import "core:c/libc"
 
-foreign {
+when ODIN_OS == .Linux {
+	foreign import lib "utf8.a"
+} else when ODIN_OS == .Windows  {
+	foreign import lib "utf8.lib"
+} else when ODIN_OS == .Darwin {
+    foreign import lib "utf8.a"
+} else {
+	foreign import lib "system:utf8"
+}
+
+foreign lib {
     utf8casecmp :: proc(src1: rawptr, src2: rawptr) -> c.int ---
 
     utf8cat :: proc(dst: rawptr, src: rawptr) -> rawptr ---
